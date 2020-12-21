@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Hexo的Next主题下文章标题的评论数显示问题</title>
+    <url>/2020/12/21/Hexo%E7%9A%84Next%E4%B8%BB%E9%A2%98%E4%B8%8B%E6%96%87%E7%AB%A0%E6%A0%87%E9%A2%98%E7%9A%84%E8%AF%84%E8%AE%BA%E6%95%B0%E6%98%BE%E7%A4%BA%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<p>  在hexo的next主题下，使用了valine评论系统后，会自动地在文章的标题下显示出这篇文章的评论数。<br>  <a id="more"></a><br>  但文字默认的是使用”valine: “,如下图显示：</p>
+<p>  <img src="https://github.com/afdfhdfwzy/picForBlog/raw/main/valineproblem1.PNG" alt="avatar1"></p>
+<p>  不同于不蒜子计数器的修改方式，也就是在themes\next\layout_third-party\statistics下的<br>  busuanzi-counter.swig中在<span>标签前添加汉字。在themes\next\layout_macro下的有关valine的标签处修改是无效的。</p>
+<p>  经过测试后需要在themes\next\languages目录下的zn-CH.yml配置文件中进行修改。</p>
+<p>  具体是在下图中添加如下内容：</p>
+<p>  <img src="https://github.com/afdfhdfwzy/picForBlog/raw/main/valineproblem3.PNG" alt="avatar2"></p>
+<p>  修改完成后的效果图如下：</p>
+<p>  <img src="https://github.com/afdfhdfwzy/picForBlog/raw/main/valineproblem4.PNG" alt="avatar3"></p>
+]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>next主题</tag>
+      </tags>
+  </entry>
+</search>
