@@ -184,6 +184,91 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/23/Java%E5%8F%98%E5%8F%82%E6%96%B9%E6%B3%95%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avataricon.jpg">
+      <meta itemprop="name" content="好起来了">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="好起来了">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/23/Java%E5%8F%98%E5%8F%82%E6%96%B9%E6%B3%95%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">Java变参方法笔记</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-12-23 22:25:44 / 修改时间：22:56:38" itemprop="dateCreated datePublished" datetime="2020-12-23T22:25:44+08:00">2020-12-23</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">评论数：</span>
+    
+    <a title="valine" href="/2020/12/23/Java%E5%8F%98%E5%8F%82%E6%96%B9%E6%B3%95%E7%AC%94%E8%AE%B0/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/12/23/Java%E5%8F%98%E5%8F%82%E6%96%B9%E6%B3%95%E7%AC%94%E8%AE%B0/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="一：变参方法"><a href="#一：变参方法" class="headerlink" title="一：变参方法"></a>一：变参方法</h2><p>首先，变参方法指的是可以接受任意数量参数的方法。<br>&lt;!-more-&gt;<br>在定义时，他的表达形式如下图：</p>
+<p><code>public findMax(int... nums);</code></p>
+<p>其中<code>int</code>后的“<code>...</code>”是代码的一部分，这样定义之后，该方法就可以接受任意个int型整数作为其参数。<br>可变参数只有一个，且一定在方法参数的末尾处。</p>
+<p>而“<code>int...</code>”的实质是 <code>int[]</code> ，也就是<code>int</code>类型的数组，里面的每一个元素就是传入的参数，<br>从int…到int[]的过程是由编译器执行的。</p>
+<h2 id="二：一些问题"><a href="#二：一些问题" class="headerlink" title="二：一些问题"></a>二：一些问题</h2><h3 id="1-当一个类中重载了两个方法如下所示："><a href="#1-当一个类中重载了两个方法如下所示：" class="headerlink" title="1. 当一个类中重载了两个方法如下所示："></a>1. 当一个类中重载了两个方法如下所示：</h3><p><code>public setParam(int x);</code><br><code>public setParam(int... x);</code></p>
+<p>其中一个方法只接受一个<code>int</code>类型整数，而另一个方法接受<code>int</code>类型的可变参数.<br>这时如果调用该方法并传入一个整数a，哪个方法会被执行呢？<br>实际运行结果如下：</p>
+<p>从上图可以看到，仅接收一个整数作为参数的方法会优先与变参方法执行。</p>
+<h3 id="2-能否定义两个重载方法，其中一个接受int数组，而另一个方法接受int类型可变参数？"><a href="#2-能否定义两个重载方法，其中一个接受int数组，而另一个方法接受int类型可变参数？" class="headerlink" title="2. 能否定义两个重载方法，其中一个接受int数组，而另一个方法接受int类型可变参数？"></a>2. 能否定义两个重载方法，其中一个接受int数组，而另一个方法接受int类型可变参数？</h3><p>即，能否在一个类中定义如下两个方法：</p>
+<p><code>public setParam(int[] x);</code><br><code>public setParam(int... x);</code></p>
+<p>实际结果如下：</p>
+<p>在编写过程中，IDE就会提示错误信息，这是因为<code>int..</code>的实质就是<code>int</code>类型数组，只不过数组中存放的时传入的参数。<br>因此这两个方法本质是一样的，这就会造成编译错误。</p>
+<h3 id="3-既然可变参数的本质是对应数据类型的数组，那么是否可以直接传入这样一个数组呢？"><a href="#3-既然可变参数的本质是对应数据类型的数组，那么是否可以直接传入这样一个数组呢？" class="headerlink" title="3. 既然可变参数的本质是对应数据类型的数组，那么是否可以直接传入这样一个数组呢？"></a>3. 既然可变参数的本质是对应数据类型的数组，那么是否可以直接传入这样一个数组呢？</h3><p>下图为实际结果：</p>
+<p>可以看出，可变参数确实可以接受直接传入的数组，因为他们本质上是相同的，<br>只不过编译器会把传入的参数转换为数组形式。<br>实际上，通过这个问题，可以引申出一个小技巧，那就是对原本最后一个参数是数组的方法，完全可以<br>直接将其改造为可变参数，这样也不会破坏原有的代码。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/21/Hexo%E7%9A%84Next%E4%B8%BB%E9%A2%98%E4%B8%8B%E6%96%87%E7%AB%A0%E6%A0%87%E9%A2%98%E7%9A%84%E8%AF%84%E8%AE%BA%E6%95%B0%E6%98%BE%E7%A4%BA%E9%97%AE%E9%A2%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -337,7 +422,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -350,7 +435,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
