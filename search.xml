@@ -21,6 +21,58 @@
       </tags>
   </entry>
   <entry>
+    <title>LeetCode.05.03反转位数</title>
+    <url>/2021/01/07/LeetCode-05-03%E5%8F%8D%E8%BD%AC%E4%BD%8D%E6%95%B0/</url>
+    <content><![CDATA[<h3 id="题目："><a href="#题目：" class="headerlink" title="题目："></a>题目：</h3><p>给定一个32位整数<code>num</code>,你可以将一个数位从0变为1.请编写一个程序，找出你能获得的最长的一串1的长度。</p>
+<a id="more"></a>
+<p>示例1：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">输入：num = <span class="number">1775</span>(<span class="number">11011101111</span>)</span><br><span class="line">输出：<span class="number">8</span></span><br></pre></td></tr></table></figure>
+<p>示例2：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">输入：num = <span class="number">7</span>(<span class="number">0111</span>)</span><br><span class="line">输出：<span class="number">4</span></span><br></pre></td></tr></table></figure>
+<h3 id="思路："><a href="#思路：" class="headerlink" title="思路："></a>思路：</h3><p>使用<code>String</code>对象自带的split方法，可以传入一个字符串，然后返回按照传入字符串切割出的字符串数组。<br>在本题中给split函数传入0即可。这时得到了被0分割开的字符串数组，其中每个字符串都是全为1的串。<br><font color=#FF0000>需要注意的是，连续的 <code>00</code> 中间会返回一个空串。</font><br>之后从下标为1开始遍历整个字符串数组，因为我们可以将一个0改为1，所以最终得到的全1字符串长度为当前下标对应字符串<br>加上上一个全1字符串再加1，遍历完整个数组得到的最大值就是最终结果，详细代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public int reverseBits(int num) &#123;</span><br><span class="line">        String n &#x3D; Integer.toBinaryString(num);</span><br><span class="line">        String[] array &#x3D; n.split(&quot;0&quot;);</span><br><span class="line">        if(array.length &lt; 1) return 1;</span><br><span class="line">        int max &#x3D; array[0].length();</span><br><span class="line">        int res &#x3D; max + 1;</span><br><span class="line">        for( int i&#x3D;1;i&lt;array.length;i++)&#123;</span><br><span class="line">            if(array[i-1].length() + array[i].length() &gt; max)&#123;</span><br><span class="line">                max &#x3D; array[i-1].length() + array[i].length();</span><br><span class="line">                res &#x3D; max + 1;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        if(num &#x3D;&#x3D; -1) res--;</span><br><span class="line">        return  res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="问题："><a href="#问题：" class="headerlink" title="问题："></a>问题：</h3><p>刚开始提交时，我发现在输入<code>num=-1</code>时，无法通过，且程序给出的答案比正确答案多1，<br>其原因是，在java中负数的二进制串是补码形式，也就是除符号位外全部取反再加1，而-1的二进制串则是<br><code>11111111111111111111111111111111</code><br>当以0分割时，只能得到一个长为32的全1字符串，而在程序中还会再加1，<br>因为程序认为根据题目要求还有一个0会变为1，而实际上在32位整数上已经没有0了，因此最大只能获得长为32的全1字符串。</p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>位计算</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>LeetCode.990.等式方程的可满足性与并查集</title>
+    <url>/2021/01/07/LeetCode-990-%E7%AD%89%E5%BC%8F%E6%96%B9%E7%A8%8B%E7%9A%84%E5%8F%AF%E6%BB%A1%E8%B6%B3%E6%80%A7%E4%B8%8E%E5%B9%B6%E6%9F%A5%E9%9B%86/</url>
+    <content><![CDATA[<h3 id="一：并查集"><a href="#一：并查集" class="headerlink" title="一：并查集"></a>一：并查集</h3><h4 id="1-定义"><a href="#1-定义" class="headerlink" title="1.定义"></a>1.定义</h4><p>并查集是一种用来求出图中连通分支个数的数据结构，在一个图中，一个节点和它能够到达的所有节点的集合是一个连通分支。<br>并查集由一个<code>parent[]</code>数组和<code>join()</code>、<code>find()</code>等函数组成。</p>
+<a id="more"></a>
+<h4 id="2-原理"><a href="#2-原理" class="headerlink" title="2.原理"></a>2.原理</h4><ul>
+<li>并查集的<code>parent[]</code>数组表示了每个元素的父节点。</li>
+<li><code>join()</code>方法能够根据给定的equation将两个连通分支合并，具体方法是将其中一个元素的parent的parent指向第二个元素。</li>
+<li><code>find()</code>方法的作用是进行路径压缩，即原本的连通分支可能是一颗深度&gt;1的树，而每次查找元素parent的时候就调用<code>find()</code><br>方法，这样可以将每个元素都指向其连通分量的根节点，这样如果需要判断两元素是否连通，只需要判断其<code>find()</code>返回值是否相同即可</li>
+</ul>
+<h4 id="3-总结"><a href="#3-总结" class="headerlink" title="3.总结"></a>3.总结</h4><p>综上所述，并查集是一个在合并和查找过程中能够进行动态路径压缩的数据结构，<br>它通过<code>join()</code>和<code>find()</code>等方法对底层的数组进行控制，保证连通的节点都指向同一个根节点，以此来解决连通分量问题。</p>
+<h3 id="二：等式方程的可满足性"><a href="#二：等式方程的可满足性" class="headerlink" title="二：等式方程的可满足性"></a>二：等式方程的可满足性</h3><h4 id="1-问题"><a href="#1-问题" class="headerlink" title="1.问题"></a>1.问题</h4><p>给定一个由表示变量之间关系的字符串方程组成的数组，每个字符串方程 <code>equations[i]</code> 的长度为 <code>4</code>，<br>并采用两种不同的形式之一：<code>&quot;a==b&quot;</code> 或 <code>&quot;a!=b&quot;</code>。<br>在这里，<code>a</code> 和 <code>b</code> 是小写字母（不一定不同），表示单字母变量名。<br>只有当可以将整数分配给变量名，以便满足所有给定的方程时才返回 true，否则返回 false。</p>
+<h4 id="2-思路"><a href="#2-思路" class="headerlink" title="2.思路"></a>2.思路</h4><p>在这个问题中可以发现，如果 <code>a==b</code> 且 <code>b==c</code> 则<code>a==c</code>，这就是求连通分量问题，只要能判断出题目给的<br>不等式中，<code>a</code>和<code>b</code>是在同一个连通分量里，则返回<code>False</code>，如果所用的不等式里的元素都不位于同一个连通分量<br>则返回<code>True</code>。</p>
+<p>因此选择并查集方法，先将给定的等式读入，并合并成最终的连通分量，再对不等式进行判断是否在同一连通分量中，<br>根据判断的结果返回最终答案，具体代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public boolean equationsPossible(String[] equations) &#123;</span><br><span class="line">        int size &#x3D; equations.length;</span><br><span class="line">        int id &#x3D; 0;</span><br><span class="line">        Map&lt;Character, Integer&gt; map &#x3D; new HashMap&lt;&gt;(2 * size);</span><br><span class="line">        UnionFind unionfind &#x3D; new UnionFind(2 * size);</span><br><span class="line">        for(String equation : equations)&#123;</span><br><span class="line">            char var1 &#x3D; equation.charAt(0);</span><br><span class="line">            char var2 &#x3D; equation.charAt(3);</span><br><span class="line">            char relation &#x3D; equation.charAt(1);</span><br><span class="line">            if( relation &#x3D;&#x3D; &#39;&#x3D;&#39;)&#123;</span><br><span class="line">                if( !map.containsKey(var1) )&#123;</span><br><span class="line">                    map.put(var1, id);</span><br><span class="line">                    id++;</span><br><span class="line">                &#125;</span><br><span class="line">                if( !map.containsKey(var2) )&#123;</span><br><span class="line">                    map.put(var2, id);</span><br><span class="line">                    id++;</span><br><span class="line">                &#125;</span><br><span class="line">                unionfind.union(map.get(var1), map.get(var2));</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">        for(String equation : equations)&#123;</span><br><span class="line">            char var1 &#x3D; equation.charAt(0);</span><br><span class="line">            char var2 &#x3D; equation.charAt(3);</span><br><span class="line">            char relation &#x3D; equation.charAt(1);</span><br><span class="line">            if( relation &#x3D;&#x3D; &#39;!&#39;)&#123;</span><br><span class="line">                if(var1&#x3D;&#x3D;var2) return false;</span><br><span class="line">                </span><br><span class="line">                if(map.get(var1)&#x3D;&#x3D;null || map.get(var2)&#x3D;&#x3D;null) continue;</span><br><span class="line">                </span><br><span class="line">                if(unionfind.isConnected(map.get(var1), map.get(var2)))&#123;</span><br><span class="line">                    return false;</span><br><span class="line">                &#125;else&#123;</span><br><span class="line">                    continue;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">        if(map.size() &#x3D;&#x3D; 0) return true;</span><br><span class="line">        return true;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    class UnionFind&#123;</span><br><span class="line">        int[] parent;</span><br><span class="line"></span><br><span class="line">        public UnionFind(int size)&#123;</span><br><span class="line">            parent &#x3D; new int[size];</span><br><span class="line">            for(int i&#x3D;0;i&lt;parent.length;i++)&#123;</span><br><span class="line">                parent[i] &#x3D; i;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        public void union(int x, int y)&#123;</span><br><span class="line">            int rootx &#x3D; find(x);</span><br><span class="line">            int rooty &#x3D; find(y);</span><br><span class="line">            if(rootx &#x3D;&#x3D; rooty) return;</span><br><span class="line">            parent[rootx] &#x3D; rooty;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public int find(int x)&#123;</span><br><span class="line">            if( x !&#x3D; parent[x])&#123;</span><br><span class="line">                parent[x] &#x3D; find(parent[x]);</span><br><span class="line">            &#125;</span><br><span class="line">            return parent[x];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public boolean isConnected(int x, int y)&#123;</span><br><span class="line">            int rootx &#x3D; find(x);</span><br><span class="line">            int rooty &#x3D; find(y);</span><br><span class="line"></span><br><span class="line">            if(rootx &#x3D;&#x3D; rooty) return true;</span><br><span class="line">            return false;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中在并查集<code>UnionFind</code>类中:</p>
+<ul>
+<li><code>union()</code>方法负责将两个元素所属的连通分量进行合并，并且动态的进行路径压缩。</li>
+<li><code>find()</code>方法就是在寻找连通分量唯一根节点的同时进行动态路径压缩的方法，<br>它会被其他方法在执行时调用，实现动态压缩。</li>
+<li><code>isConnected()</code>方法用来判断两个元素是否属于同一连通分量。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>并查集</tag>
+        <tag>图</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java变参方法笔记</title>
     <url>/2020/12/23/Java%E5%8F%98%E5%8F%82%E6%96%B9%E6%B3%95%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<h2 id="一：变参方法"><a href="#一：变参方法" class="headerlink" title="一：变参方法"></a>一：变参方法</h2><p>首先，变参方法指的是可以接受任意数量参数的方法。</p>
@@ -47,27 +99,6 @@
       </categories>
       <tags>
         <tag>java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>LeetCode.05.03反转位数</title>
-    <url>/2021/01/07/LeetCode-05-03%E5%8F%8D%E8%BD%AC%E4%BD%8D%E6%95%B0/</url>
-    <content><![CDATA[<h3 id="题目："><a href="#题目：" class="headerlink" title="题目："></a>题目：</h3><p>给定一个32位整数<code>num</code>,你可以将一个数位从0变为1.请编写一个程序，找出你能获得的最长的一串1的长度。</p>
-<a id="more"></a>
-<p>示例1：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">输入：num = <span class="number">1775</span>(<span class="number">11011101111</span>)</span><br><span class="line">输出：<span class="number">8</span></span><br></pre></td></tr></table></figure>
-<p>示例2：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">输入：num = <span class="number">7</span>(<span class="number">0111</span>)</span><br><span class="line">输出：<span class="number">4</span></span><br></pre></td></tr></table></figure>
-<h3 id="思路："><a href="#思路：" class="headerlink" title="思路："></a>思路：</h3><p>使用<code>String</code>对象自带的split方法，可以传入一个字符串，然后返回按照传入字符串切割出的字符串数组。<br>在本题中给split函数传入0即可。这时得到了被0分割开的字符串数组，其中每个字符串都是全为1的串。<br><font color=#FF0000>需要注意的是，连续的 <code>00</code> 中间会返回一个空串。</font><br>之后从下标为1开始遍历整个字符串数组，因为我们可以将一个0改为1，所以最终得到的全1字符串长度为当前下标对应字符串<br>加上上一个全1字符串再加1，遍历完整个数组得到的最大值就是最终结果，详细代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public int reverseBits(int num) &#123;</span><br><span class="line">        String n &#x3D; Integer.toBinaryString(num);</span><br><span class="line">        String[] array &#x3D; n.split(&quot;0&quot;);</span><br><span class="line">        if(array.length &lt; 1) return 1;</span><br><span class="line">        int max &#x3D; array[0].length();</span><br><span class="line">        int res &#x3D; max + 1;</span><br><span class="line">        for( int i&#x3D;1;i&lt;array.length;i++)&#123;</span><br><span class="line">            if(array[i-1].length() + array[i].length() &gt; max)&#123;</span><br><span class="line">                max &#x3D; array[i-1].length() + array[i].length();</span><br><span class="line">                res &#x3D; max + 1;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        if(num &#x3D;&#x3D; -1) res--;</span><br><span class="line">        return  res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="问题："><a href="#问题：" class="headerlink" title="问题："></a>问题：</h3><p>刚开始提交时，我发现在输入<code>num=-1</code>时，无法通过，且程序给出的答案比正确答案多1，<br>其原因是，在java中负数的二进制串是补码形式，也就是除符号位外全部取反再加1，而-1的二进制串则是<br><code>11111111111111111111111111111111</code><br>当以0分割时，只能得到一个长为32的全1字符串，而在程序中还会再加1，<br>因为程序认为根据题目要求还有一个0会变为1，而实际上在32位整数上已经没有0了，因此最大只能获得长为32的全1字符串。</p>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-        <tag>位计算</tag>
       </tags>
   </entry>
 </search>
