@@ -42,8 +42,32 @@
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;  </span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">(<span class="keyword">int</span>... params)</span></span>&#123;  </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;params.length;i++)&#123;</span><br><span class="line">            System.out.println(params[i]);</span><br><span class="line">        &#125;  </span><br><span class="line">    &#125;  </span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;  </span><br><span class="line">        Demo demo = <span class="keyword">new</span> Demo();  </span><br><span class="line">        demo.print(<span class="number">1</span>, <span class="number">2</span>);  </span><br><span class="line">        demo.print(<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">1</span>,<span class="number">2</span>&#125;);</span><br><span class="line">    &#125;  </span><br><span class="line">&#125; </span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">1</span></span><br><span class="line"><span class="comment">2</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
 <p>可以看出，可变参数确实可以接受直接传入的数组，因为他们本质上是相同的，<br>只不过编译器会把传入的参数转换为数组形式。<br>实际上，通过这个问题，可以引申出一个小技巧，那就是对原本最后一个参数是数组的方法，完全可以<br>直接将其改造为可变参数，这样也不会破坏原有的代码。</p>
 ]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
       <tags>
         <tag>java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>LeetCode.05.03反转位数</title>
+    <url>/2021/01/07/LeetCode-05-03%E5%8F%8D%E8%BD%AC%E4%BD%8D%E6%95%B0/</url>
+    <content><![CDATA[<h3 id="题目："><a href="#题目：" class="headerlink" title="题目："></a>题目：</h3><p>给定一个32位整数<code>num</code>,你可以将一个数位从0变为1.请编写一个程序，找出你能获得的最长的一串1的长度。</p>
+<a id="more"></a>
+<p>示例1：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">输入：num = <span class="number">1775</span>(<span class="number">11011101111</span>)</span><br><span class="line">输出：<span class="number">8</span></span><br></pre></td></tr></table></figure>
+<p>示例2：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">输入：num = <span class="number">7</span>(<span class="number">0111</span>)</span><br><span class="line">输出：<span class="number">4</span></span><br></pre></td></tr></table></figure>
+<h3 id="思路："><a href="#思路：" class="headerlink" title="思路："></a>思路：</h3><p>使用<code>String</code>对象自带的split方法，可以传入一个字符串，然后返回按照传入字符串切割出的字符串数组。<br>在本题中给split函数传入0即可。这时得到了被0分割开的字符串数组，其中每个字符串都是全为1的串。<br><font color=#FF0000>需要注意的是，连续的 <code>00</code> 中间会返回一个空串。</font><br>之后从下标为1开始遍历整个字符串数组，因为我们可以将一个0改为1，所以最终得到的全1字符串长度为当前下标对应字符串<br>加上上一个全1字符串再加1，遍历完整个数组得到的最大值就是最终结果，详细代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public int reverseBits(int num) &#123;</span><br><span class="line">        String n &#x3D; Integer.toBinaryString(num);</span><br><span class="line">        String[] array &#x3D; n.split(&quot;0&quot;);</span><br><span class="line">        if(array.length &lt; 1) return 1;</span><br><span class="line">        int max &#x3D; array[0].length();</span><br><span class="line">        int res &#x3D; max + 1;</span><br><span class="line">        for( int i&#x3D;1;i&lt;array.length;i++)&#123;</span><br><span class="line">            if(array[i-1].length() + array[i].length() &gt; max)&#123;</span><br><span class="line">                max &#x3D; array[i-1].length() + array[i].length();</span><br><span class="line">                res &#x3D; max + 1;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        if(num &#x3D;&#x3D; -1) res--;</span><br><span class="line">        return  res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>###问题：<br>刚开始提交时，我发现在输入<code>num=-1</code>时，无法通过，且程序给出的答案比正确答案多1，<br>其原因是，在java中负数的二进制串是补码形式，也就是除符号位外全部取反再加1，而-1的二进制串则是<br><code>11111111111111111111111111111111</code>当以0分割时，只能得到一个长为32的全1字符串，而在程序中还会再加1，<br>因为程序认为根据题目要求还有一个0会变为1，而实际上在32位整数上已经没有0了，因此最大只能获得长为32的全1字符串。</p>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>位计算</tag>
       </tags>
   </entry>
 </search>
